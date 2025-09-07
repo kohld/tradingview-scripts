@@ -1,0 +1,17 @@
+//@version=6
+indicator('200 EMA with Trend Color', overlay = true)
+
+// Inputs
+length = input.int(200, title = 'EMA Length', minval = 1)
+
+// Calculate the 200 EMA
+ema200 = ta.ema(close, length)
+
+// Determine the color based on the trend
+emaColor = close > ema200 ? color.green : color.red
+
+// Plot the 200 EMA with the determined color
+plot(ema200, color = emaColor, title = '200 EMA', linewidth = 2)
+
+// Optional: Add a background color for better visualization
+bgcolor(close > ema200 ? color.new(color.green, 90) : color.new(color.red, 90))
