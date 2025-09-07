@@ -1,0 +1,65 @@
+//@version=6
+strategy('Buffett-Inspired Value Strategy', overlay = true)
+
+// --- Input Parameters ---
+// Longer Moving Average (as a reference for "Fair Value")
+emaLength = input.int(200, 'EMA Length (Long)', minval = 10)
+emaSource = input(close, 'EMA Source')
+
+// RSI settings for oversold/overbought conditions
+rsiLength = input.int(14, 'RSI Length', minval = 1)
+rsiOversold = input.int(30, 'RSI Oversold Level', minval = 1)
+rsiOverbought = input.int(70, 'RSI Overbought Level', minval = 1)
+
+// Take Profit and Stop Loss percentages
+takeProfitPercent = input.float(10.0, 'Take Profit (%)', minval = 0.1) / 100
+stopLossPercent = input.float(5.0, 'Stop Loss (%)', minval = 0.1) / 100
+
+// --- Indicator Calculations ---
+emaValue = ta.ema(emaSource, emaLength)
+rsiValue = ta.rsi(emaSource, rsiLength)
+
+// --- Plotting Indicators on the Chart ---
+plot(emaValue, 'EMA', color = color.blue, linewidth = 2)
+plot(rsiValue, 'RSI', color = color.orange, display = display.none) // Do not plot RSI directly on the price chart
+
+hline(rsiOversold, 'RSI Oversold', color = color.green, linestyle = hline.style_dotted, display = display.none)
+hline(rsiOverbought, 'RSI Overbought', color = color.red, linestyle = hline.style_dotted, display = display.none)
+
+// --- Strategy Logic ---
+
+// Variables for entry price and Take Profit/Stop Loss Levels
+var float entryPrice = na
+var float takeProfitPrice = na
+var float stopLossPrice = na
+
+// Buy condition: Price is significantly below the EMA and RSI is oversold
+buyCondition = close < emaValue * 0.95 and rsiValue < rsiOversold // 5% below EMA as "Margin of Safety"
+
+// If no position is open and the buy condition is met
+if buyCondition and strategy.position_size == 0
+    strategy.entry('Buy', strategy.long) // Renamed from "Long" to "Buy"
+    entryPrice := close // Store the entry price
+    takeProfitPrice := close * (1 + takeProfitPercent)
+    stopLossPrice := close * (1 - stopLossPercent)
+
+    // --- NEW: Alert for Buy Recommendation ---
+    alert('Buffett Strategy: Buy Signal for ' + syminfo.ticker + ' at ' + str.tostring(close), alert.freq_once_per_bar)
+
+// Selling / Position Management
+if strategy.position_size > 0
+    // Take Profit
+    strategy.exit('Sell (Profit)', from_entry = 'Buy', limit = takeProfitPrice) // Renamed from "Take Profit" to "Sell (Profit)"
+
+    // Stop Loss
+    strategy.exit('Sell (Loss)', from_entry = 'Buy', stop = stopLossPrice) // Renamed from "Stop Loss" to "Sell (Loss)"
+
+// Optional: Exit on strong overbought RSI - might be aggressive, Buffett would typically hold
+// Uncomment if you want to test this
+// if rsiValue > rsiOverbought
+//     strategy.close("Buy", comment="RSI Overbought") // Renamed from "Long" to "Buy"
+
+
+// Plotting Entry/Exit points (optional, for visual confirmation)
+plotshape(buyCondition and strategy.position_size == 0, style = shape.triangleup, location = location.belowbar, color = color.green, size = size.small, title = 'Buy Signal')
+plotshape(strategy.position_size > 0 and (close >= takeProfitPrice or close <= stopLossPrice), style = shape.triangledown, location = location.abovebar, color = color.red, size = size.small, title = 'Sell Signal')
