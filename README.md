@@ -2,7 +2,18 @@
 
 A collection of Pine Script indicators and strategies for TradingView, focusing on technical analysis and value investing approaches.
 
-## 📊 Scripts Overview
+## Table of Contents
+
+- [Scripts Overview](#scripts-overview)
+  - [200 EMA with Trend Color](#1-200-ema-with-trend-color-200-ema-with-trend-colorpine)
+  - [Buffett-Inspired Value Strategy](#2-buffett-inspired-value-strategy-buffett-inspired-value-strategypine)
+- [How to Use](#how-to-use)
+- [Recommended Usage](#recommended-usage)
+- [Disclaimer](#disclaimer)
+- [License](#license)
+- [Contributing](#contributing)
+
+## Scripts Overview
 
 ### 1. 200 EMA with Trend Color (`200-ema-with-trend-color.pine`)
 
@@ -38,7 +49,7 @@ A systematic trading strategy inspired by Warren Buffett's value investing princ
 
 **Philosophy:** Combines Buffett's "buy below fair value" approach with technical confirmation through RSI oversold conditions.
 
-## 🚀 How to Use
+## How to Use
 
 1. **Installation:**
    - Open TradingView
@@ -56,19 +67,19 @@ A systematic trading strategy inspired by Warren Buffett's value investing princ
    - Backtest the Buffett strategy before live trading
    - Consider market conditions and fundamental analysis alongside technical signals
 
-## 📈 Recommended Usage
+## Recommended Usage
 
 - **200 EMA Indicator:** Best on daily, weekly, or monthly charts for trend identification
 - **Buffett Strategy:** Suitable for swing trading and long-term position building on daily charts
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 These scripts are for educational and informational purposes only. Past performance does not guarantee future results. Always conduct your own research and consider your risk tolerance before making investment decisions.
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🤝 Contributing
+## Contributing
 
 Feel free to fork this repository and submit pull requests with improvements or additional scripts. Please ensure all contributions follow Pine Script best practices and include proper documentation.
